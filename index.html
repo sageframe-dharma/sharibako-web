@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sharibako — One encrypted box for every API key you own</title>
+  <meta name="description" content="A native Mac app and CLI that keeps your projects' API keys and .env secrets in one encrypted, git-backed vault behind Touch ID. Your .env files keep working — they just stop being the only copy. Free on GitHub or direct download." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Sharibako — One encrypted box for every API key you own" />
+  <meta property="og:description" content="Your .env files keep working exactly as they do today. They just stop being the only copy of your secrets." />
+  <meta property="og:image" content="https://sharibako.sageframe.net/assets/icons/og-image.png" />
+  <meta property="og:url" content="https://sharibako.sageframe.net" />
+  <link rel="canonical" href="https://sharibako.sageframe.net/" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/favicon-192.png" />
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Sharibako",
+    "description": "A native Mac app and CLI that keeps development secrets in one encrypted, git-backed vault behind Touch ID, and regenerates project .env files on demand.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": ["macOS"],
+    "url": "https://sharibako.sageframe.net",
+    "offers": [
+      { "@type": "Offer", "price": "0", "priceCurrency": "USD", "description": "Free on GitHub (GPL-3.0)" }
+    ],
+    "author": { "@type": "Person", "name": "Andrew T. Marcus" },
+    "license": "https://www.gnu.org/licenses/gpl-3.0.html"
+  }
+  </script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="wordmark" href="/">
+      <img src="assets/icons/app-icon.png" alt="" />
+      Sharibako <span class="kanji">舎利箱</span>
+    </a>
+    <nav class="site-nav">
+      <a href="how-it-works.html">How it works</a>
+      <a href="help.html">Help</a>
+      <a href="faq.html">FAQ</a>
+      <a class="nav-cta" href="#get">Get Sharibako</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="page">
+    <div class="hero-grid">
+      <div>
+        <div class="kicker">For the developer with fifteen projects and one drawer of API keys</div>
+        <h1>One encrypted box for <em>every API key</em> you own.</h1>
+        <p class="sub">
+          Sharibako is a native Mac app and command-line tool that keeps your projects'
+          secrets in a single encrypted vault behind Touch&nbsp;ID. Your
+          <code>.env</code> files keep working exactly as they do today — they just
+          stop being the only copy of your secrets.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#get">Download for Mac</a>
+          <a class="btn btn-ghost" href="https://github.com/sageframe-no-kaji/sharibako" target="_blank" rel="noopener">Free on GitHub</a>
+        </div>
+        <p class="hero-note">macOS (Apple Silicon) · open source, GPL-3.0 · direct purchase supports development</p>
+      </div>
+      <div>
+        <div class="terminal" aria-label="Terminal example">
+          <div class="terminal-bar"><span></span><span></span><span></span></div>
+          <div class="terminal-body"><span class="p">$</span> cd ~/Projects/newsletter
+<span class="p">$</span> sharibako run npm start
+<span class="c">◆ Touch ID · decrypting 4 secrets for scope 'newsletter'</span>
+<span class="c">◆ injected into environment — nothing written to disk</span>
+
+<span class="k">&gt; newsletter@1.0.0 start</span>
+<span class="k">&gt; Server listening on :3000</span>
+
+<span class="c"># your code just reads process.env.MAILCHIMP_API_KEY</span>
+<span class="c"># it can't tell Sharibako was ever there</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="principle narrow">
+      The working copy stays plain, because your tools need it.
+      Every <strong>other</strong> copy — the backup, the sync, the history, the
+      new machine — is encrypted. That one sentence is the whole design.
+    </div>
+  </div>
+</div>
+
+<!-- ============ THE PROBLEM ============ -->
+<section>
+  <div class="page narrow">
+    <div class="kicker">The problem</div>
+    <h2>Every project has a <code>.env</code>. Each one is the only copy.</h2>
+    <p class="lede">
+      Your secrets — API keys, tokens, database passwords — live in little
+      gitignored files scattered across your projects. Gitignored means
+      unversioned. Unversioned means unbackable. The file that matters most is
+      the one your backups are explicitly told to skip.
+    </p>
+    <div class="cards">
+      <div class="card">
+        <div class="num">LOSS</div>
+        <h3>Laptop dies, keys die with it</h3>
+        <p>Rebuilding your <code>.env</code> files is a scavenger hunt through
+        provider dashboards, old notes, and Slack messages. Some keys you'll
+        never find again.</p>
+      </div>
+      <div class="card">
+        <div class="num">LEAK</div>
+        <h3>Backing them up <em>is</em> the leak</h3>
+        <p>Dropbox, Time Machine, a private "dotfiles" repo — every obvious fix
+        copies plaintext secrets into systems you can't audit. And one
+        <code>git add .</code> puts them in history forever.</p>
+      </div>
+      <div class="card">
+        <div class="num">SPRAWL</div>
+        <h3>One key, pasted eight times</h3>
+        <p>The same <code>OPENAI_API_KEY</code> lives in eight projects. Time to
+        rotate it? Good luck finding all eight. Nothing tracks where your keys
+        went.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section>
+  <div class="page">
+    <div class="narrow">
+      <div class="kicker">The fix</div>
+      <h2>Every secret lives once. Everything else regenerates.</h2>
+      <p class="lede">
+        Sharibako keeps one canonical, encrypted copy of each secret in a vault —
+        a plain folder in your home directory where every key is a small
+        <a href="https://age-encryption.org" target="_blank" rel="noopener">age</a>-encrypted
+        file, and the whole folder is a git repository.
+      </p>
+    </div>
+
+    <div class="flow" role="img" aria-label="Diagram: project .env files flow into the encrypted vault, which syncs to a private git remote">
+      <div class="flow-node">
+        <div class="glyph">📄</div>
+        <h4>Your projects' <code>.env</code> files</h4>
+        <p>Plain, readable, disposable — regenerate any of them with one click,
+        or skip the file and inject secrets straight into your process.</p>
+      </div>
+      <div class="flow-arrow">⇄</div>
+      <div class="flow-node vault">
+        <div class="glyph">🗃</div>
+        <h4>The vault</h4>
+        <p>One encrypted copy of every secret, organized by project. Opened
+        with Touch&nbsp;ID. The canonical source of truth on your Mac.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="glyph">☁︎</div>
+        <h4>Your private git remote</h4>
+        <p>Backup, history, and recovery — and the remote only ever sees
+        ciphertext. GitHub never learns a single secret.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="num">01 · IMPORT</div>
+        <h3>Point it at your projects</h3>
+        <p>Sharibako scans where you keep code, finds every project with a
+        <code>.env</code>, and imports the secrets you choose — one decision per
+        key. Your files aren't touched.</p>
+      </div>
+      <div class="card">
+        <div class="num">02 · USE</div>
+        <h3>Materialize or inject</h3>
+        <p><strong>Materialize</strong> writes a project's <code>.env</code> from
+        the vault. Or run <code>sharibako run npm start</code> and secrets go
+        straight into the process — nothing on disk at all.</p>
+      </div>
+      <div class="card">
+        <div class="num">03 · SLEEP EASY</div>
+        <h3>Sync, rotate, recover</h3>
+        <p>Push the vault to a private remote. Rotate a shared key once and
+        every project gets it. New Mac? Clone the vault, restore your key,
+        done in minutes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VALUE ============ -->
+<section>
+  <div class="page narrow">
+    <div class="kicker">What you get</div>
+    <h2>Three things a folder of <code>.env</code> files can never give you.</h2>
+
+    <h3>Never lose a key again</h3>
+    <p>The vault is a git repo. Push it to a private remote and your secrets are
+    backed up, versioned, and recoverable — as ciphertext, so the remote learns
+    nothing. A new laptop is: clone the vault, restore your key, materialize.</p>
+
+    <h3>Rotate once, not eight times</h3>
+    <p>A key used by many projects lives in the vault exactly once; projects
+    <em>link</em> to it. Change it in one place and every project picks up the
+    new value on the next materialize. Sharibako also detects <em>drift</em> —
+    when a <code>.env</code> on disk no longer matches the vault — and shows you
+    exactly which keys differ.</p>
+
+    <h3>Or skip the file entirely</h3>
+    <p><code>sharibako run</code> decrypts your secrets in memory, hands them to
+    your process as ordinary environment variables, and leaves nothing on disk.
+    Your code can't tell the difference.</p>
+
+    <div class="callout rust">
+      <div class="kicker">What Sharibako doesn't do</div>
+      <h3>We don't encrypt your working <code>.env</code> — on purpose.</h3>
+      <p>Your tools need that file in plaintext, and anyone who controls your
+      live, unlocked session can read whatever your tools can read. Encrypting
+      the working copy inconveniences you daily and an attacker not at all —
+      that's security theater, and plenty of tools sell it.</p>
+      <p>Sharibako protects every <em>other</em> copy instead: the backup, the
+      sync, the git remote, the history, the next machine. Those are the copies
+      that actually leak. <a href="how-it-works.html#theater">The full argument
+      is here</a> — it's the most important page on this site.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TWO SURFACES ============ -->
+<section>
+  <div class="page narrow">
+    <div class="kicker">Two surfaces, one vault</div>
+    <h2>A calm Mac app. A complete CLI. Your choice, or both.</h2>
+    <p>The <strong>Workshop</strong> — the native Mac app — gives you your whole
+    vault at a glance: every project, every key, what's in sync and what's
+    drifted, with a first-run setup that takes minutes and explains itself.
+    Reveal a value with Touch&nbsp;ID, rotate it, materialize, sync — all
+    without a terminal.</p>
+    <p>The <strong>CLI</strong> does everything the app does, scriptably:</p>
+    <div class="terminal">
+      <div class="terminal-bar"><span></span><span></span><span></span></div>
+      <div class="terminal-body"><span class="p">$</span> sharibako init          <span class="c"># bring this project's .env into the vault</span>
+<span class="p">$</span> sharibako materialize   <span class="c"># write .env from the vault</span>
+<span class="p">$</span> sharibako run npm start <span class="c"># inject secrets, no file at all</span>
+<span class="p">$</span> sharibako rotate newsletter MAILCHIMP_API_KEY
+<span class="p">$</span> sharibako status        <span class="c"># every project, every key, at a glance</span>
+<span class="p">$</span> sharibako sync          <span class="c"># commit + push ciphertext to your remote</span></div>
+    </div>
+    <p style="margin-top:1rem;">Both surfaces read the same vault and the same
+    Touch&nbsp;ID-guarded key. Set up in the app, script in the terminal — or
+    never open the terminal at all.</p>
+  </div>
+</section>
+
+<!-- ============ GET IT ============ -->
+<section id="get">
+  <div class="page narrow">
+    <div class="kicker">Get Sharibako</div>
+    <h2>Free where it counts. Paid where it's convenient.</h2>
+    <p class="lede">Sharibako is open source (GPL-3.0). Build it yourself for
+    nothing, or buy the signed, notarized app and support development.</p>
+
+    <div class="pricing">
+      <div class="price-card featured">
+        <div class="kicker">Direct download</div>
+        <!-- TODO: replace with the real Payhip product link + settled price (Deferred Decision #1) -->
+        <div class="price">$9 <small>one-time · signed &amp; notarized</small></div>
+        <ul>
+          <li>Native Mac app + CLI, ready to run</li>
+          <li>Signed and notarized — no Gatekeeper fights</li>
+          <li>Updates for the 1.x series</li>
+          <li>Supports continued development</li>
+        </ul>
+        <a class="btn btn-primary" href="https://payhip.com/b/XXXXX" target="_blank" rel="noopener">Buy on Payhip</a>
+      </div>
+      <div class="price-card">
+        <div class="kicker">Build it yourself</div>
+        <div class="price">$0 <small>open source · GPL-3.0</small></div>
+        <ul>
+          <li>Full source on GitHub</li>
+          <li>Same app, same CLI — you compile it</li>
+          <li>Read every line that touches your keys</li>
+          <li>Issues and contributions welcome</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://github.com/sageframe-no-kaji/sharibako" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+    </div>
+
+    <p style="margin-top:1.6rem; font-size:0.9rem; color:var(--ink-faint);">
+      A security tool you can't read is a security tool you're taking on faith.
+      The source being public isn't a marketing gesture — it's the point.
+    </p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>Sharibako <span class="kanji">舎利箱</span> — a reliquary: a small box for keeping precious things.</div>
+    <div class="footer-links">
+      <a href="how-it-works.html">How it works</a>
+      <a href="help.html">Help</a>
+      <a href="faq.html">FAQ</a>
+      <a href="https://github.com/sageframe-no-kaji/sharibako" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

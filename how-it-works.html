@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How Sharibako Works — secrets, .env files, and the honest threat model</title>
+  <meta name="description" content="The deep dive: what secrets are, how .env files actually work and where they fail, why encrypting your working .env is security theater, and how Sharibako's architecture protects the copies that actually leak." />
+  <link rel="canonical" href="https://sharibako.sageframe.net/how-it-works.html" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="wordmark" href="/">
+      <img src="assets/icons/app-icon.png" alt="" />
+      Sharibako <span class="kanji">舎利箱</span>
+    </a>
+    <nav class="site-nav">
+      <a href="how-it-works.html" aria-current="page">How it works</a>
+      <a href="help.html">Help</a>
+      <a href="faq.html">FAQ</a>
+      <a class="nav-cta" href="/#get">Get Sharibako</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page narrow prose">
+  <div class="kicker">The deep dive</div>
+  <h1>How Sharibako works — from zero.</h1>
+  <p class="lede">Everything on this page assumes nothing. If you've shipped
+  secrets for years, skim the headers and stop at
+  <a href="#theater">the theater argument</a> — it's the part that explains
+  every design decision. If <code>.env</code> is new to you, start here.</p>
+
+  <h2 id="secrets">What is a secret?</h2>
+  <p>A secret is a value that <em>grants a capability</em>. An API key that
+  lets code send email as you. A database password. A token that posts to your
+  Slack. If someone else had the value, they could do the thing — that's what
+  makes it a secret.</p>
+  <p>The litmus test: <strong>if this value leaked, would you have to change
+  it?</strong> If yes, it's a secret. If no — a port number, a feature flag, a
+  public URL — it's just configuration. Configuration wants to be visible and
+  in git. Secrets are the part that can't be.</p>
+  <table>
+    <thead><tr><th>Value</th><th>Secret?</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>API key, access token</td><td>Yes</td><td>Grants capability; rotate on leak</td></tr>
+      <tr><td>Database URL with password</td><td>Yes</td><td>Contains a credential</td></tr>
+      <tr><td>Private signing / deploy key</td><td>Yes</td><td>Identity-granting</td></tr>
+      <tr><td>Webhook signing secret</td><td>Yes</td><td>Forgery-preventing</td></tr>
+      <tr><td>Publishable / public API key</td><td>No</td><td>Designed to be visible client-side</td></tr>
+      <tr><td>Hostnames, ports, URLs</td><td>No</td><td>Configuration; belongs in git</td></tr>
+      <tr><td>Feature flags, model names</td><td>No</td><td>Configuration</td></tr>
+      <tr><td><code>.env.example</code> contents</td><td>No</td><td>Names without values — commit it</td></tr>
+    </tbody>
+  </table>
+  <p>Gray zones exist — OAuth client IDs, internal hostnames, anything with
+  "test" in the name (test keys still bill and leak). When unsure, apply the
+  rotation test.</p>
+
+  <h2 id="dotenv">How <code>.env</code> files work</h2>
+  <p>Nearly every modern project keeps its secrets in a file called
+  <code>.env</code> at the project root — plain text, one
+  <code>KEY=value</code> per line:</p>
+  <pre><code>MAILCHIMP_API_KEY=a1b2c3...
+DATABASE_URL=postgres://admin:hunter2@db.example.com/prod</code></pre>
+  <p>When the app starts, a small library (dotenv and its hundred cousins)
+  reads the file and turns each line into an <em>environment variable</em> — a
+  named value the running program reads with
+  <code>os.environ["MAILCHIMP_API_KEY"]</code> or
+  <code>process.env.MAILCHIMP_API_KEY</code>. The app never knows the file
+  existed; it just sees the variables. By convention <code>.env</code> is
+  listed in <code>.gitignore</code>, so secrets stay out of version control
+  while the code goes in.</p>
+  <p>This is a genuinely good convention, and Sharibako doesn't replace it.
+  It keeps it — and fixes what's wrong with it.</p>
+  <p>The family, precisely: <code>.env</code> holds the real values, gitignored
+  and machine-local. <code>.env.local</code> is the same idea; some frameworks
+  load it <em>over</em> <code>.env</code> for per-machine overrides.
+  <code>.env.example</code> is the keys with values stripped, committed as
+  documentation of what a project needs. And
+  <code>.env.production</code>-style variants are, historically, the single
+  most common way real secrets end up in git — because ignore patterns miss
+  them.</p>
+
+  <h2 id="failures">Where <code>.env</code> files fail</h2>
+  <p>The naive model says: <em>my secrets are in a gitignored file, so they're
+  handled.</em> Actually, four problems are quietly accumulating:</p>
+  <ol>
+    <li><strong>Each <code>.env</code> is the only copy.</strong> Gitignored
+    means unversioned, and unversioned means unbackable-up — deliberately. If
+    your laptop dies, every <code>.env</code> on it dies too. The file that
+    matters most is the one your backup discipline is explicitly told to
+    skip.</li>
+    <li><strong>Backing them up creates the leak.</strong> The obvious fix —
+    Dropbox, Time Machine, a private dotfiles repo — copies plaintext secrets
+    into systems you don't control and can't audit. The secret now exists in
+    sync history, on a drive in a drawer, in a repo you'll one day make public
+    without remembering what's in it.</li>
+    <li><strong>Git is one mistake away.</strong> One <code>git add .</code>
+    before the ignore entry exists and the secret is in history — where
+    deleting the file does not remove it. Every clone made in the meantime
+    keeps the old value forever. Leaked-key scanners on GitHub stay busy for a
+    reason.</li>
+    <li><strong>Sprawl and drift.</strong> The same key pasted into eight
+    projects; rotation becomes a manhunt. No answer to "what was the old
+    value," "when did this change," or "which projects use this key."</li>
+  </ol>
+
+  <h2 id="theater">Why encrypting your <code>.env</code> is theater</h2>
+  <p>Here is the correction that shapes Sharibako's entire design.</p>
+  <p>The instinctive fix for "plaintext secrets on disk" is to encrypt the
+  <code>.env</code> itself. <strong>Actually, that protects almost
+  nothing</strong> — because your tools need the plaintext to run. Whatever
+  encrypts the file must decrypt it every time <code>npm start</code> runs,
+  which means the plaintext (or the means to produce it) is always present and
+  reachable on a live machine.</p>
+  <p>And anyone who can act as you on your live machine — malware running in
+  your session, a person at your unlocked keyboard — can read <em>everything
+  you can read</em>: your SSH keys, your browser cookies, your password
+  manager while it's unlocked, and yes, your secrets, encrypted file or not.
+  Encryption at that layer inconveniences you daily and an attacker not at
+  all. That is the definition of security theater.</p>
+  <p>What encryption <em>genuinely</em> protects is every copy that leaves
+  your live session: the synced copy, the backed-up copy, the pushed copy, the
+  historical copy, the copy on the drive in a stolen laptop (alongside
+  full-disk encryption, which is the real answer to theft). Those copies sit
+  in places where an attacker doesn't need your live session — and those are
+  exactly the copies that leak in practice.</p>
+  <blockquote>Let the working copy be plain. Make every other copy safe.
+  <br />That single sentence is Sharibako.</blockquote>
+
+  <h2 id="architecture">The architecture</h2>
+  <p>Sharibako keeps <strong>one canonical, encrypted copy</strong> of every
+  secret in the vault — by default a folder at
+  <code>~/.sharibako/vault</code>. Three properties define it:</p>
+  <ul>
+    <li><strong>The filesystem is the database.</strong> Every secret is a
+    small file encrypted with <a href="https://age-encryption.org"
+    target="_blank" rel="noopener">age</a> — a modern, audited, deliberately
+    simple encryption tool. A scope (one project's slice) is a directory. You
+    can look inside the vault with <code>ls</code> and understand everything
+    you see. No opaque database, no proprietary format, no lock-in: the vault
+    is readable by standard tools forever.</li>
+    <li><strong>Git is the backup.</strong> The vault folder is a git
+    repository. <code>sync</code> commits and pushes to your private remote —
+    and since every file in it is ciphertext, the remote learns nothing.
+    History comes for free: every rotation is a commit.</li>
+    <li><strong>The Keychain guards the key.</strong> The one secret that
+    can't encrypt itself — your age private key — lives in the macOS Keychain,
+    stored so that reading it requires user presence: Touch&nbsp;ID or your
+    password. Decrypt operations prompt; a successful check is reused for
+    five minutes so bulk operations don't nag.</li>
+  </ul>
+
+  <h3>Scopes and markers</h3>
+  <p>A <em>scope</em> is one project's slice of the vault — usually one repo ↔
+  one scope. A small <code>.sharibako</code> marker file in your project
+  directory records which scope the directory binds to and where its
+  <code>.env</code> should be written. The marker contains no secrets — it's
+  an address, safe to look at, cheap to recreate.</p>
+
+  <h3>Materialize and run</h3>
+  <p><strong>Materialize</strong> decrypts a scope's secrets and writes the
+  project's <code>.env</code> — plain, because your tools need it, and
+  disposable, because the vault can always write it again.
+  <strong>Run</strong> (<code>sharibako run npm start</code>) skips the file:
+  secrets are decrypted in memory, set as environment variables, and the
+  Sharibako process <em>becomes</em> your command — signals, exit codes, and
+  Ctrl-C all behave normally, and nothing ever touches disk.</p>
+
+  <h3>Shared secrets and links</h3>
+  <p>A key used by many projects lives once in the vault's shared pool;
+  each project holds a <em>link</em> — a pointer, not a copy. Rotate the
+  shared value once and every linked project materializes the new value.
+  This is the answer to sprawl.</p>
+
+  <h3>Drift</h3>
+  <p>If you hand-edit a <code>.env</code>, it now disagrees with the vault.
+  Sharibako calls that <em>drift</em>, detects it per-key, and lets you choose
+  the winner — reconcile from the vault, or import the edited value back in.
+  Nothing is ever silently overwritten.</p>
+
+  <h2 id="threat-model">The threat model, stated fully</h2>
+  <p>A security tool owes you a plain statement of what it does and doesn't
+  protect against. Here is Sharibako's.</p>
+  <p><strong>Protected against:</strong></p>
+  <ul>
+    <li>Loss of a working <code>.env</code> — it's regenerable.</li>
+    <li>Loss of the machine — clone the vault from your remote, restore your
+    key backup, materialize.</li>
+    <li>Leakage through backup and sync channels — only ciphertext ever leaves
+    the machine via Sharibako.</li>
+    <li>Git accidents involving the <em>vault</em> — its contents are
+    ciphertext.</li>
+    <li>Stolen powered-off hardware — FileVault plus vault ciphertext plus a
+    Keychain-guarded key.</li>
+    <li>Casual value exposure — secrets are masked in the app until a
+    Touch&nbsp;ID reveal.</li>
+  </ul>
+  <p><strong>Explicitly not protected against:</strong></p>
+  <ul>
+    <li>An attacker with your live, unlocked session — they are you, and
+    nothing at this layer can help. (No dev-secret tool can; the honest ones
+    say so.)</li>
+    <li>A compromised tool that legitimately receives the secret — it needs
+    the secret to work.</li>
+    <li>Plaintext copies you make by hand outside Sharibako's flows.</li>
+    <li>"Delete from history" — git retains old ciphertext, so
+    revoke-and-rotate is the real remediation for a compromised key.
+    Everywhere. Always.</li>
+  </ul>
+
+  <h2 id="options">The alternatives, honestly</h2>
+  <p>Every approach to secrets is a different answer to "where does the
+  canonical copy live, and what protects it?"</p>
+  <table>
+    <thead><tr><th>Approach</th><th>Canonical copy</th><th>Honest assessment</th></tr></thead>
+    <tbody>
+      <tr><td>Plaintext <code>.env</code> only</td><td>The file itself</td>
+      <td>Zero setup, universally understood — and unbackable, unversioned,
+      sprawling, one mistake from git history. Fine for a throwaway; a
+      liability by the second project.</td></tr>
+      <tr><td>Password manager (1Password, Bitwarden)</td><td>Their encrypted store</td>
+      <td>Excellent custody, project-blind: no scopes, no <code>.env</code>
+      generation, no drift detection. Ideal for logins — and for backing up
+      your Sharibako key.</td></tr>
+      <tr><td>Cloud secret managers (AWS, Vault, PaaS config)</td><td>A server</td>
+      <td>Built for unattended machines and teams: IAM, audit logs, rotation
+      policy. Exactly right for production; friction and overkill for a
+      personal laptop. Sharibako deliberately doesn't compete here.</td></tr>
+      <tr><td>Encrypted-in-repo (SOPS, git-crypt, raw age)</td><td>Ciphertext in git</td>
+      <td>The right architecture — the one Sharibako shares — delivered as
+      composable primitives. No project binding, no regenerate loop, no drift
+      detection, key custody on you. Great if you enjoy assembling it;
+      Sharibako is that architecture with the plumbing done and
+      Touch&nbsp;ID on the door.</td></tr>
+      <tr><td>OS keychain directly</td><td>The Keychain</td>
+      <td>Hardware-backed, biometric-gated — and no project model, no files,
+      no sync story. A component, not a solution. Sharibako uses it as exactly
+      that: custody for the one key that can't protect itself.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="fit">Where Sharibako sits</h2>
+  <p>Deliberately narrow: <strong>local-first custody of development secrets,
+  for one human (or two who share everything), on machines they sit
+  at.</strong> The canonical copy is files on your disk. Protection is age
+  encryption with the key in your Keychain. Backup and history are git,
+  because you already trust git. It ends where unattended machines and teams
+  begin — by design, those problems belong to the server-shaped tools
+  above.</p>
+  <p style="margin-top:2rem;"><a class="btn btn-primary" href="/#get">Get Sharibako</a>
+  &nbsp; <a class="btn btn-ghost" href="faq.html">Read the FAQ</a></p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>Sharibako <span class="kanji">舎利箱</span> — a reliquary: a small box for keeping precious things.</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="help.html">Help</a>
+      <a href="faq.html">FAQ</a>
+      <a href="https://github.com/sageframe-no-kaji/sharibako" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

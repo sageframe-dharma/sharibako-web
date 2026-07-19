@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sharibako Help — setup, importing, everyday use, recovery, and the CLI</title>
+  <meta name="description" content="Every Sharibako workflow, step by step: first-run setup, importing projects, materialize and run, shared secrets, drift, backup and recovery, deleting, and the full CLI reference." />
+  <link rel="canonical" href="https://sharibako.sageframe.net/help.html" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="wordmark" href="/">
+      <img src="assets/icons/app-icon.png" alt="" />
+      Sharibako <span class="kanji">舎利箱</span>
+    </a>
+    <nav class="site-nav">
+      <a href="how-it-works.html">How it works</a>
+      <a href="help.html" aria-current="page">Help</a>
+      <a href="faq.html">FAQ</a>
+      <a class="nav-cta" href="/#get">Get Sharibako</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page">
+  <div class="help-layout">
+
+    <nav class="help-toc" aria-label="Help contents">
+      <div class="toc-head">Start here</div>
+      <a href="#install">Install</a>
+      <a href="#first-run">First-run setup</a>
+      <a href="#tour">The tour</a>
+      <div class="toc-head">Bringing secrets in</div>
+      <a href="#import">Import your projects</a>
+      <a href="#verdicts">The five verdicts</a>
+      <a href="#add">Adding by hand</a>
+      <a href="#orphans">Orphaned markers</a>
+      <div class="toc-head">Everyday use</div>
+      <a href="#materialize">Materialize &amp; preview</a>
+      <a href="#run">Run (no file at all)</a>
+      <a href="#reveal">Reveal, edit, rotate</a>
+      <a href="#drift">Drift &amp; reconcile</a>
+      <a href="#sync">Sync &amp; rescan</a>
+      <div class="toc-head">Sharing &amp; structure</div>
+      <a href="#shared">Shared secrets &amp; links</a>
+      <div class="toc-head">Safety</div>
+      <a href="#backup">Backup &amp; recovery</a>
+      <a href="#delete">Deleting things</a>
+      <div class="toc-head">Reference</div>
+      <a href="#cli">CLI reference</a>
+      <a href="#glossary">Glossary</a>
+      <a href="#troubleshooting">Troubleshooting</a>
+    </nav>
+
+    <div class="prose" style="padding-top:0;">
+      <div class="kicker">Help</div>
+      <h1>Every workflow, step by step.</h1>
+      <p class="lede">The app explains itself as you go — this page is the
+      same knowledge in one place, for reading ahead or finding your way
+      back.</p>
+
+      <h2 id="install">Install</h2>
+      <p><strong>Direct download:</strong> buy the signed, notarized app,
+      open the <code>.dmg</code>, drag Sharibako to Applications, launch. No
+      Gatekeeper warnings, no setup beyond first-run.</p>
+      <p><strong>From source (free):</strong> clone
+      <a href="https://github.com/sageframe-no-kaji/sharibako" target="_blank" rel="noopener">the repo</a>
+      and follow the README's build instructions. You'll need the Swift
+      toolchain and <code>age</code> (<code>brew install age</code>). Same
+      app, same CLI — you compile it.</p>
+      <p>Sharibako uses <code>age</code> for encryption and <code>git</code>
+      for the vault's history. First-run checks for both and gives you the
+      copy-paste install line if either is missing.</p>
+
+      <h2 id="first-run">First-run setup</h2>
+      <p>The first time you launch Sharibako with no vault, a setup guide
+      walks you through five short steps. It takes a few minutes, and the
+      order matters — each step builds on the last.</p>
+      <ol>
+        <li><strong>Prerequisites.</strong> Sharibako checks that
+        <code>age</code> (the encryption tool) is installed. If not, it shows
+        the exact <code>brew install age</code> line and a Re-check button.
+        Nothing proceeds without it — even importing an existing key needs
+        <code>age</code> for every later encryption.</li>
+        <li><strong>Your key.</strong> Generate a fresh encryption key
+        (stored in the macOS Keychain behind Touch&nbsp;ID) — or import an
+        identity file if you already have one from another machine. If a
+        Sharibako key already exists in your Keychain, this step says so and
+        moves on. There is never a second key.</li>
+        <li><strong>Back the key up.</strong> The one non-negotiable step.
+        You save a backup copy of the key to a location you choose — iCloud
+        Drive and Documents are suggested — and Sharibako <em>verifies the
+        saved file matches</em> before letting you continue. Lose the key,
+        lose the vault; this backup is your recovery path.</li>
+        <li><strong>Where you keep code.</strong> Pick the folder your
+        projects live under (Sharibako suggests likely candidates like
+        <code>~/Projects</code>). This becomes the <em>scan root</em> — where
+        Sharibako looks for projects and their <code>.env</code> files. The
+        vault itself lives at <code>~/.sharibako/vault</code>; this page tells
+        you that plainly.</li>
+        <li><strong>Optional remote.</strong> Paste a private git remote URL
+        (a fresh empty GitHub repo works perfectly) and the vault will back
+        itself up there — ciphertext only — every time you Sync. Skippable,
+        but this is the step that makes your secrets survivable, so: don't
+        skip it.</li>
+      </ol>
+      <p>Finish creates the vault and, if it found projects with
+      <code>.env</code> files under your root, offers to import the first one
+      immediately.</p>
+
+      <h2 id="tour">The tour</h2>
+      <p><strong>Help&nbsp;→ Welcome to Sharibako…</strong> replays the setup
+      guide as a read-only tour against your real configuration: your actual
+      vault path, scan roots, and remote, with live prerequisite checks. It
+      changes nothing — it's the "wait, how does this work again?" button.</p>
+
+      <h2 id="import">Import your projects</h2>
+      <p>Click <strong>Ingest Project…</strong> in the action panel. Sharibako
+      walks your scan roots and lists every project that has a
+      <code>.env</code> (or <code>.env.local</code>) but isn't in the vault
+      yet — name and path, click to import.</p>
+      <ol>
+        <li>Pick a project from the list (or <strong>Choose Other…</strong>
+        for one outside your roots).</li>
+        <li>Review its keys. Each detected secret shows its name and value —
+        in the clear, because they come from a file that's already readable on
+        your disk — and gets a verdict (below).</li>
+        <li>Confirm the scope name (suggested from the folder name) and
+        type.</li>
+        <li>Click Import. One Touch&nbsp;ID encrypts everything into the
+        vault and drops a <code>.sharibako</code> marker in the project.</li>
+      </ol>
+      <p>After each import, the list returns with the remaining projects — so
+      you can walk your whole root in one sitting. Your <code>.env</code>
+      files are never modified by import: byte-for-byte untouched.</p>
+      <p>Re-importing a project that's already in the vault is safe: Sharibako
+      shows only the keys the vault doesn't have yet ("reconcile"), and tells
+      you plainly when there's nothing new.</p>
+
+      <h2 id="verdicts">The five verdicts</h2>
+      <p>Every key you import gets one decision:</p>
+      <table>
+        <thead><tr><th>Verdict</th><th>Meaning</th><th>Use when</th></tr></thead>
+        <tbody>
+          <tr><td>Import as scope-local</td><td>Encrypted copy in this project's scope</td><td>The default — a key this project owns</td></tr>
+          <tr><td>Move to shared</td><td>Key moves to the shared pool; this project links to it</td><td>A key other projects will use too</td></tr>
+          <tr><td>Link to shared</td><td>This project points at an existing shared key</td><td>The key is already in the shared pool</td></tr>
+          <tr><td>Leave alone</td><td>Stays in the <code>.env</code>, vault ignores it</td><td>Values that aren't really secrets (ports, flags)</td></tr>
+          <tr><td>Skip</td><td>Not imported, not tracked</td><td>Junk, dead keys, things you'll deal with later</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="add">Adding by hand</h2>
+      <p>Not everything arrives via import. The action panel's Add group
+      covers the rest:</p>
+      <ul>
+        <li><strong>Add Scope</strong> — a new empty project slice, for a
+        project that doesn't have a <code>.env</code> yet.</li>
+        <li><strong>Add Secret</strong> — one new key in the selected scope.
+        Opens in its own small window, so you can check other secrets while
+        you type.</li>
+        <li><strong>Add Shared Secret</strong> — a new key in the shared pool,
+        ready for projects to link to.</li>
+      </ul>
+
+      <h2 id="orphans">Orphaned markers</h2>
+      <p>An <em>orphaned marker</em> is a <code>.sharibako</code> file in some
+      project directory that names a scope your vault doesn't have — usually a
+      leftover from a deleted scope, or a marker that arrived with a cloned
+      repo. They appear in the sidebar under "Unlinked markers," each with two
+      buttons:</p>
+      <ul>
+        <li><strong>Create Scope from Marker</strong> — imports that project
+        under the marker's recorded scope name. The healing move.</li>
+        <li><strong>Remove Stray Marker</strong> — deletes the marker file
+        (just the marker — the project's <code>.env</code> and the vault are
+        untouched). Asks for confirmation and names the exact file first.</li>
+      </ul>
+
+      <h2 id="materialize">Materialize &amp; preview</h2>
+      <p>Select a scope and click <strong>Materialize</strong>: Sharibako
+      decrypts that scope's secrets (one Touch&nbsp;ID) and writes the
+      project's <code>.env</code> where the marker says it belongs. If the
+      file already exists and differs, you get a per-key diff and nothing is
+      overwritten until you confirm.</p>
+      <p><strong>Preview .env</strong> shows exactly what would be written —
+      before anything touches disk. <strong>Materialize All Stale</strong>
+      reconciles every drifted project in one confirmed batch, one
+      Touch&nbsp;ID for the lot. <strong>Jump to Directory</strong> opens the
+      project folder in Finder.</p>
+
+      <h2 id="run">Run — secrets with no file at all</h2>
+      <p>From a project directory in the terminal:</p>
+      <pre><code>cd ~/Projects/newsletter
+sharibako run npm start</code></pre>
+      <p>Sharibako reads the project's marker, decrypts its secrets in memory
+      (Touch&nbsp;ID), sets them as environment variables, and then
+      <em>becomes</em> your command — signals, Ctrl-C, and exit codes all
+      behave exactly as if you'd run it directly. Nothing is written to disk.
+      Your code just reads <code>process.env</code> /
+      <code>os.environ</code> as always.</p>
+      <p>Use <code>run</code> when you'd rather not have a plaintext
+      <code>.env</code> sitting in the project at all; use materialize when a
+      tool insists the file exist.</p>
+
+      <h2 id="reveal">Reveal, edit, rotate</h2>
+      <p>Secrets are masked in the app until you reveal them —
+      <strong>Reveal</strong> costs a Touch&nbsp;ID and shows the value until
+      you select something else. Editing a value or its notes prompts the same
+      way. <strong>Rotate</strong> replaces a value with a new one; the old
+      value is retained in the vault's git history (encrypted), so "what was
+      it before Tuesday?" always has an answer.</p>
+      <p>A successful Touch&nbsp;ID is reused for five minutes, so a burst of
+      operations — a batch materialize, several reveals — costs one prompt,
+      not ten.</p>
+
+      <h2 id="drift">Drift &amp; reconcile</h2>
+      <p><em>Drift</em> is when a project's <code>.env</code> on disk
+      disagrees with the vault — you hand-edited the file, or rotated a key
+      and haven't re-materialized. <strong>Check Drift</strong> sweeps every
+      project (one Touch&nbsp;ID) and marks each drifted key in red, per key,
+      per project.</p>
+      <p>To resolve: <strong>Materialize</strong> (vault wins — rewrites the
+      file), or re-import the project (file wins — the edited value comes into
+      the vault). Nothing is ever silently overwritten in either
+      direction.</p>
+
+      <h2 id="sync">Sync &amp; rescan</h2>
+      <p><strong>Sync</strong> commits the vault's current state and pushes to
+      your remote — this is the moment your secrets become survivable.
+      Sharibako never commits behind your back: rotations, imports, and
+      deletions sit uncommitted until you Sync, so the commit boundary is
+      yours.</p>
+      <p><strong>Rescan</strong> re-walks your scan roots — after adding
+      projects, moving directories, or editing the config — and refreshes
+      every project's status glyph in the sidebar.</p>
+
+      <h2 id="shared">Shared secrets &amp; links</h2>
+      <p>The same <code>OPENAI_API_KEY</code> in eight projects should be one
+      secret, not eight copies. In Sharibako it lives once in the
+      <em>shared pool</em>; each project holds a <em>link</em> — a pointer,
+      not a copy. Materialize resolves the link and writes the current shared
+      value into that project's <code>.env</code>.</p>
+      <ul>
+        <li>During import, choose <strong>Move to shared</strong> for the
+        first project and <strong>Link to shared</strong> for the rest —
+        Sharibako suggests the link when it recognizes a matching name.</li>
+        <li>Rotate the shared value once; every linked project gets it on
+        next materialize (drift shows you which ones are stale).</li>
+        <li><strong>Unlink</strong> turns a link back into a local copy —
+        the project keeps the current value, independence restored.</li>
+      </ul>
+
+      <h2 id="backup">Backup &amp; recovery</h2>
+      <p>Two things constitute your entire secret store: <strong>the vault</strong>
+      (backed up by Sync to your private remote) and <strong>the key</strong>
+      (backed up during first-run to a file you chose). Everything else — every
+      <code>.env</code>, every marker — regenerates from those two.</p>
+      <p><strong>New Mac, step by step:</strong></p>
+      <ol>
+        <li>Install Sharibako and <code>age</code>.</li>
+        <li>Clone your vault: <code>git clone &lt;your-remote&gt; ~/.sharibako/vault</code></li>
+        <li>Launch Sharibako → first-run detects no key → choose
+        <strong>Import</strong> and point it at your key backup file. The key
+        goes into the new Mac's Keychain.</li>
+        <li>Materialize each project as you need it. Done.</li>
+      </ol>
+      <p><strong>Lost the key backup but the Mac still works?</strong> Make a
+      new backup now — the key is still in your Keychain.
+      <strong>Lost the key entirely?</strong> The vault is unrecoverable —
+      this is real encryption, there is no override. Rotate the underlying
+      credentials at each provider and start a fresh vault. (This is why
+      first-run refuses to continue until the backup is verified.)</p>
+
+      <h2 id="delete">Deleting things</h2>
+      <p>Every deletion asks for confirmation, names exactly what will be
+      removed, and touches only the vault:</p>
+      <ul>
+        <li><strong>Delete Secret</strong> — removes one key from a scope.</li>
+        <li><strong>Delete Scope</strong> — removes a project's whole slice
+        from the vault. The project's <code>.env</code> and marker are left in
+        place (the marker will surface as orphaned — remove it there if the
+        project is truly gone).</li>
+        <li><strong>Deleting a shared secret</strong> (CLI) — refused if
+        projects still link to it, and the refusal names them. Unlink first,
+        or force it and let the orphaned links surface for healing.</li>
+        <li><strong>Clean</strong> (CLI) — removes a project's materialized
+        <code>.env</code>, for when a project goes dormant and you don't want
+        plaintext sitting around.</li>
+      </ul>
+      <p>Deletions, like everything else, are uncommitted until Sync — and git
+      history retains old encrypted values, so deletion means "stop using,"
+      not "erase from time." For a compromised key, the remediation is always
+      revoke-and-rotate at the provider.</p>
+
+      <h2 id="cli">CLI reference</h2>
+      <p>Everything the app does, scriptable. Run any verb with
+      <code>--help</code> for details; man pages ship with the CLI.</p>
+      <table>
+        <thead><tr><th>Verb</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>init</code></td><td>Bring the current project's <code>.env</code> into the vault, one decision per key</td></tr>
+          <tr><td><code>scan</code></td><td>Walk the scan roots; report every marker and its state</td></tr>
+          <tr><td><code>status</code></td><td>Every project, every key, in-sync or drifted, at a glance</td></tr>
+          <tr><td><code>list</code></td><td>List scopes, a scope's keys, or the shared pool (<code>--shared</code>)</td></tr>
+          <tr><td><code>get</code></td><td>Print one decrypted value (Touch&nbsp;ID)</td></tr>
+          <tr><td><code>add</code> / <code>update</code></td><td>Add or change a secret</td></tr>
+          <tr><td><code>rotate</code></td><td>Replace a value; the old one stays in encrypted history</td></tr>
+          <tr><td><code>materialize</code></td><td>Write a project's <code>.env</code> from the vault</td></tr>
+          <tr><td><code>run</code></td><td>Inject secrets into a command's environment — no file</td></tr>
+          <tr><td><code>link</code> / <code>unlink</code></td><td>Point a scope's key at a shared secret / make it local again</td></tr>
+          <tr><td><code>sync</code></td><td>Commit and push the vault to your remote</td></tr>
+          <tr><td><code>heal</code></td><td>Check every materialized file against the vault; report and fix drift</td></tr>
+          <tr><td><code>clean</code></td><td>Remove a project's materialized <code>.env</code></td></tr>
+          <tr><td><code>delete</code></td><td>Remove a secret, a scope, or a shared entry (confirmed; linker-guarded)</td></tr>
+          <tr><td><code>key generate</code> / <code>key import</code></td><td>Create or import the age key into the Keychain</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="glossary">Glossary</h2>
+      <table>
+        <thead><tr><th>Term</th><th>One sentence</th></tr></thead>
+        <tbody>
+          <tr><td>Vault</td><td>The one encrypted, git-backed folder where every secret canonically lives.</td></tr>
+          <tr><td>Scope</td><td>One project's slice of the vault — usually one repo ↔ one scope.</td></tr>
+          <tr><td>Marker</td><td>The small <code>.sharibako</code> file that binds a project directory to its scope; contains no secrets.</td></tr>
+          <tr><td>Materialize</td><td>Write a project's <code>.env</code> from the vault — the file is a disposable product, not the source.</td></tr>
+          <tr><td>Drift</td><td>A <code>.env</code> on disk that disagrees with the vault; detected per key, resolved by you.</td></tr>
+          <tr><td>Shared / link</td><td>A secret stored once and pointed at by many projects — rotate once, update everywhere.</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="troubleshooting">Troubleshooting</h2>
+      <h3>"age not found" at first-run</h3>
+      <p>Install it with <code>brew install age</code> (the wizard shows this
+      line and a Re-check button). If you don't use Homebrew, any install that
+      puts <code>age</code> and <code>age-keygen</code> on your PATH
+      works.</p>
+      <h3>Touch ID prompts more than you expect</h3>
+      <p>Every decrypt needs the key, and the key needs your presence. A
+      successful check is reused for five minutes; batch operations (Check
+      Drift, Materialize All Stale, chained imports) are designed to ride one
+      prompt. If prompts feel excessive during a workflow, that's feedback we
+      want.</p>
+      <h3>A project shows as drifted and I don't know why</h3>
+      <p>Check Drift lists the exact keys that differ. The usual causes: you
+      hand-edited the <code>.env</code>, or rotated a key and haven't
+      re-materialized. Preview .env shows precisely what materialize would
+      write before you commit to it.</p>
+      <h3>An "Unlinked marker" appeared</h3>
+      <p>Some directory has a <code>.sharibako</code> marker naming a scope
+      the vault doesn't have — a leftover, or a marker that came along with a
+      cloned repo. Use Create Scope from Marker to adopt it, or Remove Stray
+      Marker to clear it. Neither touches the project's <code>.env</code>.</p>
+      <h3>The vault won't sync</h3>
+      <p>Sync needs a configured remote (check the sidebar footer) and a
+      reachable network. The tour (Help&nbsp;→ Welcome to Sharibako…) shows
+      your current remote. Adding one later: set <code>origin</code> on
+      <code>~/.sharibako/vault</code> like any git repo.</p>
+      <h3>I built from source and Touch ID doesn't work</h3>
+      <p>Keychain access requires the app to be signed and properly installed —
+      a bare debug build can't reach it. Use the repo's install script, or run
+      with a file-based key (<code>--age-key</code>) during development. The
+      README covers both.</p>
+
+      <p style="margin-top:2.4rem;">Something not covered?
+      <a href="https://github.com/sageframe-no-kaji/sharibako/issues" target="_blank" rel="noopener">Open an issue</a> —
+      unclear help is a bug too.</p>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>Sharibako <span class="kanji">舎利箱</span> — a reliquary: a small box for keeping precious things.</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="how-it-works.html">How it works</a>
+      <a href="faq.html">FAQ</a>
+      <a href="https://github.com/sageframe-no-kaji/sharibako" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
