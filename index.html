@@ -139,8 +139,7 @@
       <div class="kicker">The fix</div>
       <h2>Every secret lives once. Everything else regenerates.</h2>
       <p class="lede">
-        Sharibako keeps one canonical, encrypted copy of each secret in a vault —
-        a plain folder in your home directory where every key is a small
+        Sharibako keeps one canonical, encrypted copy of each secret in a vault—a plain folder in your home directory where every key is a small
         <a href="https://age-encryption.org" target="_blank" rel="noopener">age</a>-encrypted
         file, and the whole folder is a git repository.
       </p>
@@ -209,8 +208,7 @@
     <h3>Rotate once, not eight times</h3>
     <p>A key used by many projects lives in the vault exactly once; projects
     <em>link</em> to it. Change it in one place and every project picks up the
-    new value on the next materialize. Sharibako also detects <em>drift</em> —
-    when a <code>.env</code> on disk no longer matches the vault—and shows you
+    new value on the next materialize. Sharibako also detects <em>drift</em>—when a <code>.env</code> on disk no longer matches the vault—and shows you
     exactly which keys differ.</p>
 
     <h3>Or skip the file entirely</h3>
@@ -223,8 +221,7 @@
       <h3>We don't encrypt your working <code>.env</code>—on purpose.</h3>
       <p>Your tools need that file in plaintext, and anyone who controls your
       live, unlocked session can read whatever your tools can read. Encrypting
-      the working copy inconveniences you daily and an attacker not at all —
-      that's security theater, and plenty of tools sell it.</p>
+      the working copy inconveniences you daily and an attacker not at all—that's security theater, and plenty of tools sell it.</p>
       <p>Sharibako protects every <em>other</em> copy instead: the backup, the
       sync, the git remote, the history, the next machine. Those are the copies
       that actually leak. <a href="how-it-works.html#theater">The full argument

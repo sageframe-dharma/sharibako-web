@@ -130,8 +130,7 @@
       <ol>
         <li>Pick a project from the list (or <strong>Choose Other…</strong>
         for one outside your roots).</li>
-        <li>Review its keys. Each detected secret shows its name and value —
-        in the clear, because they come from a file that's already readable on
+        <li>Review its keys. Each detected secret shows its name and value—in the clear, because they come from a file that's already readable on
         your disk—and gets a verdict (below).</li>
         <li>Confirm the scope name (suggested from the folder name) and
         type.</li>
@@ -191,8 +190,7 @@
       project's <code>.env</code> where the marker says it belongs. If the
       file already exists and differs, you get a per-key diff and nothing is
       overwritten until you confirm.</p>
-      <p><strong>Preview .env</strong> shows exactly what would be written —
-      before anything touches disk. <strong>Materialize All Stale</strong>
+      <p><strong>Preview .env</strong> shows exactly what would be written—before anything touches disk. <strong>Materialize All Stale</strong>
       reconciles every drifted project in one confirmed batch, one
       Touch&nbsp;ID for the lot. <strong>Jump to Directory</strong> opens the
       project folder in Finder.</p>
@@ -212,8 +210,7 @@ sharibako run npm start</code></pre>
       tool insists the file exist.</p>
 
       <h2 id="reveal">Reveal, edit, rotate</h2>
-      <p>Secrets are masked in the app until you reveal them —
-      <strong>Reveal</strong> costs a Touch&nbsp;ID and shows the value until
+      <p>Secrets are masked in the app until you reveal them—<strong>Reveal</strong> costs a Touch&nbsp;ID and shows the value until
       you select something else. Editing a value or its notes prompts the same
       way. <strong>Rotate</strong> replaces a value with a new one; the old
       value is retained in the vault's git history (encrypted), so "what was
@@ -251,12 +248,10 @@ sharibako run npm start</code></pre>
       value into that project's <code>.env</code>.</p>
       <ul>
         <li>During import, choose <strong>Move to shared</strong> for the
-        first project and <strong>Link to shared</strong> for the rest —
-        Sharibako suggests the link when it recognizes a matching name.</li>
+        first project and <strong>Link to shared</strong> for the rest—Sharibako suggests the link when it recognizes a matching name.</li>
         <li>Rotate the shared value once; every linked project gets it on
         next materialize (drift shows you which ones are stale).</li>
-        <li><strong>Unlink</strong> turns a link back into a local copy —
-        the project keeps the current value, independence restored.</li>
+        <li><strong>Unlink</strong> turns a link back into a local copy—the project keeps the current value, independence restored.</li>
       </ul>
 
       <h2 id="backup">Backup &amp; recovery</h2>
@@ -275,8 +270,7 @@ sharibako run npm start</code></pre>
       </ol>
       <p><strong>Lost the key backup but the Mac still works?</strong> Make a
       new backup now—the key is still in your Keychain.
-      <strong>Lost the key entirely?</strong> The vault is unrecoverable —
-      this is real encryption, there is no override. Rotate the underlying
+      <strong>Lost the key entirely?</strong> The vault is unrecoverable—this is real encryption, there is no override. Rotate the underlying
       credentials at each provider and start a fresh vault. (This is why
       first-run refuses to continue until the backup is verified.)</p>
 
@@ -366,14 +360,12 @@ sharibako run npm start</code></pre>
       your current remote. Adding one later: set <code>origin</code> on
       <code>~/.sharibako/vault</code> like any git repo.</p>
       <h3>I built from source and Touch ID doesn't work</h3>
-      <p>Keychain access requires the app to be signed and properly installed —
-      a bare debug build can't reach it. Use the repo's install script, or run
+      <p>Keychain access requires the app to be signed and properly installed—a bare debug build can't reach it. Use the repo's install script, or run
       with a file-based key (<code>--age-key</code>) during development. The
       README covers both.</p>
 
       <p style="margin-top:2.4rem;">Something not covered?
-      <a href="https://github.com/sageframe-no-kaji/sharibako/issues" target="_blank" rel="noopener">Open an issue</a> —
-      unclear help is a bug too.</p>
+      <a href="https://github.com/sageframe-no-kaji/sharibako/issues" target="_blank" rel="noopener">Open an issue</a>—unclear help is a bug too.</p>
     </div>
   </div>
 </div>

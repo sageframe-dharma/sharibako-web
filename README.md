@@ -1,7 +1,6 @@
 # sharibako-web
 
-The website for [Sharibako](https://github.com/sageframe-no-kaji/sharibako) —
-a native Mac app and CLI that keeps development secrets in one encrypted,
+The website for [Sharibako](https://github.com/sageframe-no-kaji/sharibako)—a native Mac app and CLI that keeps development secrets in one encrypted,
 git-backed vault behind Touch ID.
 
 Static site, no build step: four HTML pages sharing one stylesheet, wearing

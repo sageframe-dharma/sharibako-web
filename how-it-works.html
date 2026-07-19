@@ -98,8 +98,7 @@ DATABASE_URL=postgres://admin:hunter2@db.example.com/prod</code></pre>
     your laptop dies, every <code>.env</code> on it dies too. The file that
     matters most is the one your backup discipline is explicitly told to
     skip.</li>
-    <li><strong>Backing them up creates the leak.</strong> The obvious fix —
-    Dropbox, Time Machine, a private dotfiles repo—copies plaintext secrets
+    <li><strong>Backing them up creates the leak.</strong> The obvious fix—Dropbox, Time Machine, a private dotfiles repo—copies plaintext secrets
     into systems you don't control and can't audit. The secret now exists in
     sync history, on a drive in a drawer, in a repo you'll one day make public
     without remembering what's in it.</li>
@@ -149,8 +148,7 @@ DATABASE_URL=postgres://admin:hunter2@db.example.com/prod</code></pre>
     you see. No opaque database, no proprietary format, no lock-in: the vault
     is readable by standard tools forever.</li>
     <li><strong>Git is the backup.</strong> The vault folder is a git
-    repository. <code>sync</code> commits and pushes to your private remote —
-    and since every file in it is ciphertext, the remote learns nothing.
+    repository. <code>sync</code> commits and pushes to your private remote—and since every file in it is ciphertext, the remote learns nothing.
     History comes for free: every rotation is a commit.</li>
     <li><strong>The Keychain guards the key.</strong> The one secret that
     can't encrypt itself—your age private key—lives in the macOS Keychain,
