@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sharibako FAQ — honest answers about secrets, encryption, and your vault</title>
+  <title>Sharibako FAQ—honest answers about secrets, encryption, and your vault</title>
   <meta name="description" content="Is my .env encrypted? What if my laptop is stolen? Is pushing secrets to GitHub safe? What if I lose my key? Straight answers, including the ones that admit limits." />
   <link rel="canonical" href="https://sharibako.sageframe.net/faq.html" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
@@ -32,7 +32,7 @@
 
 <div class="page narrow prose">
   <div class="kicker">Frequently asked questions</div>
-  <h1>Straight answers — including the ones that admit limits.</h1>
+  <h1>Straight answers—including the ones that admit limits.</h1>
   <p class="lede">In the order people actually ask them. Where a question
   carries a common misconception, the answer starts by correcting it.</p>
 
@@ -41,11 +41,11 @@
     <details>
       <summary>Is my <code>.env</code> encrypted after I import it into Sharibako?</summary>
       <div class="answer">
-        <p><strong>No — and that's deliberate.</strong> Your tools need to read
+        <p><strong>No—and that's deliberate.</strong> Your tools need to read
         that file; encrypting it would break them or require decrypting it
         constantly, which protects nothing on a live machine. Importing makes
         an <em>encrypted copy</em> in the vault. The <code>.env</code> in your
-        project stays exactly as it was — except now it's disposable, because
+        project stays exactly as it was—except now it's disposable, because
         the vault can regenerate it.</p>
       </div>
     </details>
@@ -54,7 +54,7 @@
       <summary>Then what's the point?</summary>
       <div class="answer">
         <p>Before Sharibako, each <code>.env</code> was the only copy of its
-        secrets — unbackable, unversioned, unrotatable, one
+        secrets—unbackable, unversioned, unrotatable, one
         <code>git add .</code> from disaster. After, the canonical copy is
         encrypted, versioned, backed up to a remote that only sees ciphertext,
         and shared keys live once instead of eight times. The working file
@@ -66,7 +66,7 @@
     <details>
       <summary>What if someone steals my laptop?</summary>
       <div class="answer">
-        <p>FileVault — Mac full-disk encryption, on by default — is your
+        <p>FileVault—Mac full-disk encryption, on by default—is your
         protection there, for everything on the disk, <code>.env</code> files
         included. Sharibako adds that the vault's contents are ciphertext even
         <em>inside</em> the disk image, and your decryption key is in the
@@ -78,20 +78,20 @@
     <details>
       <summary>What if someone is sitting at my unlocked machine?</summary>
       <div class="answer">
-        <p>Then they are you, as far as the machine is concerned — they can
+        <p>Then they are you, as far as the machine is concerned—they can
         read your browser sessions, your SSH keys, and any <code>.env</code>
         file. <strong>No dev-secret tool can protect a live, unlocked session,
         and any that claims to is selling theater.</strong> What Sharibako
         gates behind Touch&nbsp;ID is the <em>vault</em>: revealing a stored
         secret's value, decrypting for materialize or run. The blast radius of
-        an unlocked machine is your working files — not your whole vault.</p>
+        an unlocked machine is your working files—not your whole vault.</p>
       </div>
     </details>
 
     <details>
       <summary>Is it really safe to push my secrets to GitHub?</summary>
       <div class="answer">
-        <p>The remote only ever receives age-encrypted files — ciphertext.
+        <p>The remote only ever receives age-encrypted files—ciphertext.
         Without your private key (which never leaves your machine and
         Keychain), the repo's contents are noise. Use a private repo anyway:
         defense in depth, and the <em>names</em> of your scopes and keys are
@@ -105,7 +105,7 @@
       <summary>What happens if I lose my key?</summary>
       <div class="answer">
         <p><strong>You lose the vault.</strong> That is the deal with real
-        encryption — there is no recovery email. This is why first-run makes
+        encryption—there is no recovery email. This is why first-run makes
         you save a backup copy of the key and verifies you actually did. Keep
         that backup somewhere durable: iCloud Drive, a printed copy, a
         password manager. Vault + key = everything; vault − key = nothing.</p>
@@ -116,7 +116,7 @@
       <summary>What happens if I lose the vault?</summary>
       <div class="answer">
         <p>If you configured a remote: <code>git clone</code>, restore your
-        key, materialize — you're back. If you never set a remote and the disk
+        key, materialize—you're back. If you never set a remote and the disk
         is gone, the vault is gone. <strong>Set the remote.</strong> It's one
         field in first-run.</p>
       </div>
@@ -126,7 +126,7 @@
       <summary>Where does my key live day-to-day?</summary>
       <div class="answer">
         <p>In the macOS Keychain, stored so that reading it requires user
-        presence — Touch&nbsp;ID or your password. When Sharibako needs it, it
+        presence—Touch&nbsp;ID or your password. When Sharibako needs it, it
         asks, uses it, and scrubs the temporary copy. A successful
         Touch&nbsp;ID is reused for five minutes so bulk operations don't
         prompt you per secret.</p>
@@ -137,7 +137,7 @@
       <summary>What counts as a secret? Should I import <em>everything</em> from my <code>.env</code>?</summary>
       <div class="answer">
         <p>Import anything you'd have to rotate if it leaked. Skip pure
-        configuration — ports, hostnames, flags — that belongs in git,
+        configuration—ports, hostnames, flags—that belongs in git,
         visibly. Sharibako's import lets you decide per key: import it, mark
         it shared, leave it alone, or skip it.</p>
       </div>
@@ -147,7 +147,7 @@
       <summary>Two of us share a project. Can we share the vault?</summary>
       <div class="answer">
         <p>Two humans who trust each other can share the vault repo and the
-        key — it works fine. What Sharibako doesn't have is <em>team
+        key—it works fine. What Sharibako doesn't have is <em>team
         features</em>: no per-person access, no audit log of who read what, no
         revoking one person. When you need those, you've outgrown the tool —
         use a team secret manager.</p>
@@ -159,8 +159,8 @@
       <div class="answer">
         <p>Out of scope, honestly. <code>run</code> and
         <code>materialize</code> are for humans at dev machines. Production
-        secrets belong in your platform's secret manager — AWS Secrets
-        Manager, Vault, your PaaS's env config — which exist precisely for
+        secrets belong in your platform's secret manager—AWS Secrets
+        Manager, Vault, your PaaS's env config—which exist precisely for
         unattended machines. Sharibako is for the laptop end of the
         pipeline.</p>
       </div>
@@ -175,14 +175,14 @@
         drift, injects into processes, and de-duplicates keys across projects.
         Keep your logins in the password manager; keep your project secrets
         somewhere that understands projects. (And keep your key
-        <em>backup</em> in the password manager — good pairing.)</p>
+        <em>backup</em> in the password manager—good pairing.)</p>
       </div>
     </details>
 
     <details>
       <summary>What's a "scope"?</summary>
       <div class="answer">
-        <p>One project's slice of the vault — usually one repo ↔ one scope.
+        <p>One project's slice of the vault—usually one repo ↔ one scope.
         The <code>.sharibako</code> marker file in your project directory
         records which scope it binds to and where the <code>.env</code> should
         be written. The marker contains no secrets.</p>
@@ -202,7 +202,7 @@
     <details>
       <summary>Is Sharibako open source? Why would I pay?</summary>
       <div class="answer">
-        <p>Fully open source, GPL-3.0 — a security tool you can't read is a
+        <p>Fully open source, GPL-3.0—a security tool you can't read is a
         tool you're taking on faith. The paid download buys you the signed,
         notarized, ready-to-run build (no toolchain, no Gatekeeper fights) and
         supports development. Same code either way.</p>
@@ -212,7 +212,7 @@
     <details>
       <summary>Why "Sharibako"?</summary>
       <div class="answer">
-        <p>舎利箱 — a reliquary: a small box for keeping precious things.
+        <p>舎利箱—a reliquary: a small box for keeping precious things.
         That's the whole product in one word.</p>
       </div>
     </details>
@@ -227,7 +227,7 @@
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div>Sharibako <span class="kanji">舎利箱</span> — a reliquary: a small box for keeping precious things.</div>
+    <div>Sharibako <span class="kanji">舎利箱</span>—a reliquary: a small box for keeping precious things.</div>
     <div class="footer-links">
       <a href="/">Home</a>
       <a href="how-it-works.html">How it works</a>

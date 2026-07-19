@@ -8,14 +8,14 @@ Static site, no build step: four HTML pages sharing one stylesheet, wearing
 the pālana palette the app itself wears (light + dark via
 `prefers-color-scheme`).
 
-- `index.html` — landing page
-- `how-it-works.html` — the technical deep dive (secrets from zero, the
+- `index.html`—landing page
+- `how-it-works.html`—the technical deep dive (secrets from zero, the
   "encrypting your working .env is theater" argument, architecture, threat
   model, alternatives)
-- `faq.html` — question-shaped answers, corrections-first
-- `help.html` — every workflow step by step + full CLI reference
+- `faq.html`—question-shaped answers, corrections-first
+- `help.html`—every workflow step by step + full CLI reference
 
-Copy is sourced from the product repo's `docs/secrets-explained.md` — when
+Copy is sourced from the product repo's `docs/secrets-explained.md`—when
 the story changes, change it there first, then re-derive these pages.
 
 ## Deploy
