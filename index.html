@@ -259,6 +259,140 @@
   </div>
 </section>
 
+<!-- ============ COMPARISON ============ -->
+<section id="compare">
+  <div class="page">
+    <div class="narrow">
+      <div class="kicker">The landscape, honestly</div>
+      <h2>Where each approach actually stands.</h2>
+      <p class="lede">Including the rows Sharibako loses — because a
+      comparison table that only shows wins is an ad, not a comparison.</p>
+    </div>
+
+    <div class="compare-wrap">
+      <table class="compare">
+        <thead>
+          <tr>
+            <th scope="col" aria-label="Capability"></th>
+            <th scope="col">Plain <code>.env</code><span class="col-note">the default</span></th>
+            <th scope="col">Password manager<span class="col-note">1Password, Bitwarden</span></th>
+            <th scope="col">Cloud secrets<span class="col-note">AWS, Vault, PaaS</span></th>
+            <th scope="col">Encrypted-in-repo<span class="col-note">SOPS, git-crypt</span></th>
+            <th scope="col" class="hero-col"><span class="badge"><img src="assets/icons/app-icon.png" alt="" />Sharibako</span><span class="col-note">this thing</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Survives a dead laptop<small>backed up, versioned, recoverable</small></th>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td class="hero-col"><span class="mark yes">✓</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Canonical copy encrypted<small>what leaves the machine is ciphertext</small></th>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td class="hero-col"><span class="mark yes">✓</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Knows your projects<small>which directory owns which secrets</small></th>
+            <td><span class="mark part">~</span></td>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark part">~</span></td>
+            <td class="hero-col"><span class="mark yes">✓</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Writes &amp; regenerates <code>.env</code> files<small>the file becomes disposable</small></th>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark part">~</span></td>
+            <td class="hero-col"><span class="mark yes">✓</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Injects into a process<small>secrets with no file on disk</small></th>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark part">~</span></td>
+            <td><span class="mark part">~</span></td>
+            <td><span class="mark part">~</span></td>
+            <td class="hero-col"><span class="mark yes">✓</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Detects drift<small>file on disk vs. canonical value, per key</small></th>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark no">—</span></td>
+            <td class="hero-col"><span class="mark yes">✓</span></td>
+          </tr>
+          <tr>
+            <th scope="row">One key, many projects<small>rotate once, update everywhere</small></th>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td><span class="mark no">—</span></td>
+            <td class="hero-col"><span class="mark yes">✓</span></td>
+          </tr>
+          <tr>
+            <th scope="row">History<small>what changed, when — old values recoverable</small></th>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td class="hero-col"><span class="mark yes">✓</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Works offline, no server, no account<small>your disk, your git remote, done</small></th>
+            <td><span class="mark yes">✓</span></td>
+            <td><span class="mark part">~</span></td>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td class="hero-col"><span class="mark yes">✓</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Biometric gate on reveal<small>Touch ID before a value is shown or decrypted</small></th>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark no">—</span></td>
+            <td class="hero-col"><span class="mark yes">✓</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Team access control &amp; audit<small>per-person permissions, who-read-what</small></th>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td><span class="mark no">—</span></td>
+            <td class="hero-col"><span class="mark no">—</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Built for servers &amp; CI<small>unattended machines, IAM, rotation policy</small></th>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark no">—</span></td>
+            <td><span class="mark yes">✓</span></td>
+            <td><span class="mark part">~</span></td>
+            <td class="hero-col"><span class="mark no">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="compare-foot narrow" style="margin-left:auto;margin-right:auto;">
+      <span class="mark yes">✓</span> built in &nbsp;·&nbsp;
+      <span class="mark part">~</span> possible with manual wiring or per-project setup &nbsp;·&nbsp;
+      <span class="mark no">—</span> not what it's for.
+      The last two rows are Sharibako's honest edges: when you need team
+      permissions or production secret delivery, use a
+      <a href="how-it-works.html#options">server-shaped tool</a> — they're
+      built for exactly that, and Sharibako deliberately isn't.
+    </p>
+  </div>
+</section>
+
 <!-- ============ GET IT ============ -->
 <section id="get">
   <div class="page narrow">

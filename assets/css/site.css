@@ -416,3 +416,85 @@ p + p { margin-top: 0.9rem; }
 .footer-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
 .footer-links a { color: var(--ink-faint); text-decoration: none; }
 .footer-links a:hover { color: var(--accent); }
+
+/* ---------- comparison matrix ---------- */
+
+.compare-wrap {
+  margin-top: 2.4rem;
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  background: var(--ground-deep);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.compare {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  min-width: 760px;
+  font-size: 0.92rem;
+}
+.compare th, .compare td {
+  padding: 0.72rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: middle;
+}
+.compare tr:last-child th, .compare tr:last-child td { border-bottom: none; }
+.compare thead th {
+  font-family: var(--serif);
+  font-size: 0.98rem;
+  font-weight: 600;
+  padding-top: 1.2rem;
+  padding-bottom: 0.9rem;
+}
+.compare thead .col-note {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--ink-ghost);
+  margin-top: 0.15rem;
+}
+.compare tbody th {
+  text-align: left;
+  font-weight: 500;
+  font-family: var(--sans);
+  color: var(--ink);
+  min-width: 220px;
+  position: sticky;
+  left: 0;
+  background: var(--ground-deep);
+  z-index: 1;
+}
+.compare tbody th small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.76rem;
+  color: var(--ink-ghost);
+}
+/* the Sharibako column */
+.compare .hero-col {
+  background: var(--wash);
+  border-left: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.compare thead .hero-col { border-top-left-radius: 10px; border-top-right-radius: 10px; }
+.compare thead .hero-col .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.compare thead .hero-col img { width: 20px; height: 20px; border-radius: 5px; display: inline-block; }
+
+.mark { font-family: var(--mono); font-size: 0.95rem; }
+.mark.yes { color: var(--accent); font-weight: 700; }
+.mark.part { color: var(--umber); }
+.mark.no { color: var(--ink-ghost); }
+
+.compare-foot {
+  font-size: 0.82rem;
+  color: var(--ink-ghost);
+  margin-top: 0.9rem;
+}
+.compare-foot .mark { font-size: 0.85rem; }
