@@ -67,6 +67,56 @@
       same knowledge in one place, for reading ahead or finding your way
       back.</p>
 
+      <div class="walk" aria-label="Visual walkthrough">
+        <div class="walk-step">
+          <figure class="shot walk-shot">
+            <img src="assets/img/walk-workshop.png" alt="The Workshop's three panes: scopes, secrets, action panel"
+                 onerror="this.parentElement.innerHTML='&lt;div class=\'shot-placeholder\'&gt;&lt;span class=\'big\'&gt;🗃&lt;/span&gt;&lt;span&gt;walk-workshop.png&lt;/span&gt;&lt;/div&gt;';" />
+          </figure>
+          <div class="walk-note">
+            <div class="step-n">THE WORKSHOP</div>
+            <h3>Your whole vault at a glance</h3>
+            <p>Three panes: your projects (scopes) on the left, the selected
+            project's secrets in the middle, and every verb—materialize,
+            check drift, sync, add—in the action panel on the right. Glyphs
+            tell you what's in sync and what's drifted before you click
+            anything.</p>
+          </div>
+        </div>
+
+        <div class="walk-step">
+          <figure class="shot walk-shot">
+            <img src="assets/img/walk-ingest.png" alt="The import sheet: detected keys with per-key verdicts"
+                 onerror="this.parentElement.innerHTML='&lt;div class=\'shot-placeholder\'&gt;&lt;span class=\'big\'&gt;📥&lt;/span&gt;&lt;span&gt;walk-ingest.png&lt;/span&gt;&lt;/div&gt;';" />
+          </figure>
+          <div class="walk-note">
+            <div class="step-n">IMPORT</div>
+            <h3>Bring a project in, one decision per key</h3>
+            <p><strong>Ingest Project…</strong> finds your <code>.env</code>-bearing
+            projects and shows each detected secret with its value and a
+            verdict—import, share, link, leave alone, or skip. One Touch&nbsp;ID
+            encrypts your choices into the vault. Your file is never touched.</p>
+          </div>
+        </div>
+
+        <div class="walk-step">
+          <figure class="shot walk-shot">
+            <img src="assets/img/walk-detail.png" alt="A revealed secret with rotate and edit controls"
+                 onerror="this.parentElement.innerHTML='&lt;div class=\'shot-placeholder\'&gt;&lt;span class=\'big\'&gt;🔑&lt;/span&gt;&lt;span&gt;walk-detail.png&lt;/span&gt;&lt;/div&gt;';" />
+          </figure>
+          <div class="walk-note">
+            <div class="step-n">USE</div>
+            <h3>Reveal, rotate, materialize</h3>
+            <p>Values are masked until you reveal them with Touch&nbsp;ID.
+            Rotate a key and the old value stays in encrypted history.
+            <strong>Materialize</strong> writes the project's <code>.env</code>
+            from the vault—or skip the file entirely and
+            <code>sharibako run</code> your command with the secrets injected in
+            memory.</p>
+          </div>
+        </div>
+      </div>
+
       <h2 id="install">Install</h2>
       <p><strong>Direct download:</strong> buy the signed, notarized app,
       open the <code>.dmg</code>, drag Sharibako to Applications, launch. No

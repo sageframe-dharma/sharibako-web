@@ -502,3 +502,66 @@ p + p { margin-top: 0.9rem; }
   margin-top: 0.8rem;
 }
 .compare-foot .mark { font-size: 0.9rem; }
+
+/* ---------- screenshots ---------- */
+
+.shot {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 22px 60px rgba(29, 27, 24, 0.22);
+  background: var(--ground-deep);
+}
+.shot img { width: 100%; display: block; }
+@media (prefers-color-scheme: dark) {
+  .shot { box-shadow: 0 22px 60px rgba(0, 0, 0, 0.5); }
+}
+
+/* hero right column becomes the app shot; drop the terminal to a strip below */
+.hero-shot { margin-top: 0; }
+
+.shot-figure { margin: 2rem 0 0.6rem; }
+.shot-figure figcaption {
+  font-size: 0.85rem;
+  color: var(--ink-ghost);
+  margin-top: 0.7rem;
+  text-align: center;
+}
+
+/* walkthrough: alternating shot + note */
+.walk { margin-top: 2.4rem; }
+.walk-step {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+.walk-step:nth-child(even) .walk-shot { order: 2; }
+@media (max-width: 780px) { .walk-step { grid-template-columns: 1fr; } .walk-step:nth-child(even) .walk-shot { order: 0; } }
+.walk-note .step-n {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+.walk-note h3 { margin-top: 0.3rem; }
+
+/* placeholder shown until a real screenshot is dropped in */
+.shot-placeholder {
+  aspect-ratio: 16 / 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: var(--ink-ghost);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  background:
+    repeating-linear-gradient(45deg, transparent, transparent 12px,
+      color-mix(in srgb, var(--accent) 5%, transparent) 12px,
+      color-mix(in srgb, var(--accent) 5%, transparent) 24px),
+    var(--ground-deep);
+}
+.shot-placeholder .big { font-size: 1.4rem; }
